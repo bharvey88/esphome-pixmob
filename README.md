@@ -282,6 +282,25 @@ neither is the round number you might expect. Set `frequency:` on the
 `cc1101:` block. If a band stays dark on one, try the other before
 suspecting anything else.
 
+## Going deeper
+
+[docs/protocol.md](docs/protocol.md) documents what actually goes on the
+air: the frame layout, the 6b8b line coding, the CRC-12 over line-coded
+bytes, the envelope fields, and the refresh timing this component relies on.
+
+`tools/` holds three things worth knowing about:
+
+- **[pin-fingerprint.yaml](tools/pin-fingerprint.yaml)** identifies which
+  wire is on which CC1101 pin without a multimeter, by finding GDO0's idle
+  clock. Reach for it when the chip ID reads anything but `0x0014`.
+- **[genframe.py](tools/genframe.py)** generates raw
+  `remote_transmitter` timings for a color on the desktop. Useful for
+  cross-checking the C++ encoder, or for a one-off config that does not
+  want the whole light platform.
+- **[fake-game.ps1](tools/fake-game.ps1)** replays a scripted game into a
+  TeamTracker sensor so you can watch the blueprint run without waiting
+  for a real one.
+
 ## Credit
 
 The protocol (6b8b line coding, reversed CRC-12, frame format, timing) is
