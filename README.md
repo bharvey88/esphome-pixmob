@@ -126,11 +126,16 @@ The blueprint lives at
 
 ## Troubleshooting
 
-If a solid color pulses rapidly (bright, dark, bright, over and over) at
-high brightness but is steady at lower brightness, the band's batteries are
-weak. Full-brightness white is the maximum current draw, and tired coin
-cells sag under it until the band browns out, recovers, and repeats. Fresh
-cells fix it. The cutoff moves down as the cells drain.
+If a solid color pulses rapidly (bright, dark, bright, over and over), the
+band's batteries are weak. Fresh cells fix it, confirmed on a band that
+pulsed at anything above 85% brightness on tired cells and went rock steady
+on new ones.
+
+The tell is that it depends on current draw rather than on any particular
+color: as the cells drain, first white and pale colors start pulsing, since
+they light all three LED channels at once, then saturated colors follow as
+you raise brightness. Deep red at 50% can look perfect while white at 100%
+strobes.
 
 Very low brightness produces no light at all: the protocol carries 6 bits
 per channel, and the bottom few steps are below the LEDs' visible
