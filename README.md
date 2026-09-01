@@ -82,8 +82,10 @@ developed on.
 
 <img src="docs/images/esk1-full-rig.jpg" width="480" alt="ESP32-C6 connected by ribbon cable to the breakout module, wired to a CC1101 module with a large antenna">
 
-The wire colors below are the ones in these photos, so you can match both
-ends against the same table.
+<img src="docs/images/wiring-esk1.svg" width="820" alt="Wiring diagram: CC1101 module 2x4 header and breakout module 2x6 header with color-coded pins, and the list of the seven connections">
+
+The wire colors below are the ones in the photos and the diagram, so you
+can match every end against the same table.
 
 | Module pin | Signal | Breakout header | Wire in the photos |
 | --- | --- | --- | --- |
