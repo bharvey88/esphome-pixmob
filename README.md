@@ -20,10 +20,25 @@ those see [pixmob-ir-reverse-engineering](https://github.com/danielweidman/pixmo
 - An antenna for your band's frequency
 
 Wire the CC1101's SPI pins (SCK, MOSI, MISO, CSN) plus GDO0 to free GPIOs.
-If your module's header is unlabeled, beware: at least one seller's board
-does not match the pinout printed on that same seller's carrier board. When
-in doubt, beep GND against the antenna shield with a multimeter and check
-the rest against a labeled module.
+
+This component was developed and tested with the
+[Rabbit-Labs CC1101 900MHz module](https://www.tindie.com/products/tehrabbitt/rabbit-labstm-cc1101-900mhz-module/),
+which has a proper 915 MHz front end and measures about +10 dBm in this
+band. Its 2x4 header is unlabeled, and its layout does not match the
+diagram printed on the seller's Flipper carrier board. The real layout,
+verified electrically, is the Ebyte E07-M1101D order in pairs from the
+power end:
+
+| Pair (from power end) | Board-edge row | Inner row |
+|---|---|---|
+| 1 | GND | VCC (3.3V) |
+| 2 | GDO0 | CSN |
+| 3 | SCK | MOSI |
+| 4 | MISO | GDO2 (unused) |
+
+To orient yourself on any unlabeled module: GND is the edge-row pin that
+has continuity to the antenna connector's shield. Never feed the module
+5V, the CC1101 is not 5V tolerant.
 
 ## Configuration
 
