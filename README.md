@@ -16,10 +16,17 @@ hardware.
 
 <img src="docs/images/pixmob-cement-board.jpg" width="620" alt="A PixMob Cement V1.1 board, silkscreened CEMENT V1.1 and PIXMOB, with two RGB LEDs and no infrared receiver">
 
-You want a board like this one:
+**By product name:** PixMob calls the RF wristband
+[Waveband](https://www.pixmob.com/products/detail/waveband), described on
+their own site as radio-frequency activated. Their X2, X4, X6 and X11
+wristbands are infrared and will not work here. If you are buying bands to
+experiment with, buy Waveband. Listings for stadium giveaways rarely say
+which model they are, so ask the seller before buying.
 
-- **"CEMENT" printed on the silkscreen.** This is the Cement family, and it
-  is the generation this component was built and tested against.
+**By board:** open one and look.
+
+- **"CEMENT" printed on the silkscreen.** This is the board inside the
+  Waveband, and the generation this component was built and tested against.
 - **No IR receiver.** IR bands have a clear or dark domed photodiode facing
   out of the board. If you see one, this component is the wrong tool.
 - Runs on **CR2032** coin cells.
