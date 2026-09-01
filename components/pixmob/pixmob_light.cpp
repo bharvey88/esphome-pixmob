@@ -10,6 +10,8 @@ static const char *const TAG = "pixmob";
 // (Pixmob_cement, BSD license). Bit-exact with pixmob_cement.cpp.
 
 static const uint32_t BIT_TIME_US = 500;
+// A frame is 45ms on air; never start a new one before the last has cleared
+static const uint32_t MIN_FRAME_GAP_MS = 50;
 static const uint8_t PREAMBLE = 0x55;
 static const uint8_t MODE_RX = 0x00;
 static const uint16_t CRC_POLY_REVERSED = 0x8F3;
@@ -112,8 +114,13 @@ void PixMobLight::write_state(light::LightState *state) {
       this->on_ = true;
       this->pending_off_ = 0;
     }
-    if (millis() - this->last_send_ >= this->refresh_ms_)
+    // Air the new color as soon as the previous frame has cleared
+    if (millis() - this->last_send_ >= MIN_FRAME_GAP_MS) {
       this->send_current_();
+      this->dirty_ = false;
+    } else {
+      this->dirty_ = true;
+    }
   } else if (this->on_) {
     this->on_ = false;
     // Queue a few explicit black frames so the band drops out immediately
@@ -124,7 +131,7 @@ void PixMobLight::write_state(light::LightState *state) {
 
 void PixMobLight::loop() {
   uint32_t now = millis();
-  if (now - this->last_send_ < this->refresh_ms_)
+  if (now - this->last_send_ < MIN_FRAME_GAP_MS)
     return;
   if (this->pending_off_ > 0) {
     this->send_color_(0, 0, 0, 0, 0, 0);
@@ -132,8 +139,11 @@ void PixMobLight::loop() {
     return;
   }
   if (this->on_) {
-    this->send_current_();
-  } else if (this->radio_active_) {
+    if (this->dirty_ || now - this->last_send_ >= this->refresh_ms_) {
+      this->send_current_();
+      this->dirty_ = false;
+    }
+  } else if (now - this->last_send_ >= this->refresh_ms_ && this->radio_active_) {
     // One refresh period after the last frame, so a queued non-blocking
     // transmission finishes before the radio leaves TX
     this->radio_->set_idle();
@@ -148,7 +158,8 @@ void PixMobLight::dump_config() {
                 "  Attack/Hold/Release: %u/%u/%u\n"
                 "  Random: %u\n"
                 "  Refresh interval: %ums",
-                this->group_, this->attack_, this->hold_, this->release_, this->random_, this->refresh_ms_);
+                this->group_, this->attack_, this->hold_, this->release_, this->random_,
+                (unsigned) this->refresh_ms_);
 }
 
 }  // namespace esphome::pixmob

@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        channel: [stable, beta, dev]
+    name: Compile (${{ matrix.channel }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ESPHome (${{ matrix.channel }})
+        run: |
+          if [ "${{ matrix.channel }}" = "stable" ]; then
+            pip install esphome
+          elif [ "${{ matrix.channel }}" = "beta" ]; then
+            pip install --pre esphome
+          else
+            pip install git+https://github.com/esphome/esphome.git@dev
+          fi
+      - name: Compile test config
+        run: esphome compile tests/ci.yaml

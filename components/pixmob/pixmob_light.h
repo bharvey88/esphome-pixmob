@@ -50,6 +50,7 @@ class PixMobLight : public Component, public light::LightOutput {
 
   bool on_{false};
   bool radio_active_{false};
+  bool dirty_{false};
   uint8_t pending_off_{0};
   uint32_t last_send_{0};
 };
