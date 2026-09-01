@@ -12,12 +12,23 @@ those see [pixmob-ir-reverse-engineering](https://github.com/danielweidman/pixmo
 
 ## Hardware
 
-- Any ESP32 board ESPHome supports (developed on an ESP32-C6)
-- A CC1101 radio module built for 868/915 MHz. This matters: the common
-  433 MHz modules share the chip but not the matching network, and lose
-  10 to 20 dB at 915 MHz. Listings titled "315/433/868/915MHz" are quoting
-  the chip datasheet, not the board. Check the silkscreen.
-- An antenna for your band's frequency
+- Any ESP32 board ESPHome supports (tested on an ESP32-C6 and a classic
+  ESP32 WROOM-32 devkit)
+- A CC1101 radio module built for 868/915 MHz, plus a matching antenna
+
+Get the band right. The common 433 MHz modules use the same chip but a
+different matching network, and they pay 10 to 20 dB for it at 915 MHz.
+Measured with the same band and the same firmware:
+
+| Module | Range |
+| --- | --- |
+| Ebyte E07-M1101D (433 MHz) | A few feet, same room |
+| Rabbit-Labs 900 MHz | Whole house, through walls and between floors |
+
+Both light the band, so a 433 module is fine for a bench test. Only the
+right band gives you a device you can leave on a shelf. Listings titled
+"315/433/868/915MHz" are quoting the chip datasheet, not the board, so
+check the silkscreen.
 
 Wire the CC1101's SPI pins (SCK, MOSI, MISO, CSN) plus GDO0 to free GPIOs.
 
