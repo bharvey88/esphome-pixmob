@@ -24,9 +24,9 @@ Wire the CC1101's SPI pins (SCK, MOSI, MISO, CSN) plus GDO0 to free GPIOs.
 This component was developed and tested with the
 [Rabbit-Labs CC1101 900MHz module](https://www.tindie.com/products/tehrabbitt/rabbit-labstm-cc1101-900mhz-module/),
 which has a proper 915 MHz front end and measures about +10 dBm in this
-band. Its 2x4 header is unlabeled, and its layout does not match the
-diagram printed on the seller's Flipper carrier board. The real layout,
-verified electrically, is the Ebyte E07-M1101D order in pairs from the
+band. Its 2x4 header has no pin labels and is easy to wire backwards, so
+here is the layout, verified electrically on the board this component was
+built against. It follows the Ebyte E07-M1101D order, in pairs from the
 power end:
 
 | Pair (from power end) | Board-edge row | Inner row |
