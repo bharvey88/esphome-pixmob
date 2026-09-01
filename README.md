@@ -6,9 +6,30 @@ picker, transitions, effects, automations. A background refresh keeps the
 band lit for as long as the light is on, so you get steady colors instead of
 the 3.4 second bursts the protocol gives you out of the box.
 
-Only works with the RF bands (915 MHz US / 868 MHz EU, CMT2210LH receiver
-inside). The far more common IR PixMob bands are a different protocol; for
-those see [pixmob-ir-reverse-engineering](https://github.com/danielweidman/pixmob-ir-reverse-engineering).
+## Check your band first
+
+This only works on the **RF** PixMob bands, the ones with a sub-GHz radio
+receiver inside. Most PixMob bands handed out at concerts are **infrared**
+instead, and they will never respond to this no matter how the radio is
+configured. Open the wristband and look at the board before buying any
+hardware.
+
+<img src="docs/images/pixmob-cement-board.jpg" width="620" alt="A PixMob Cement V1.1 board, silkscreened CEMENT V1.1 and PIXMOB, with two RGB LEDs and no infrared receiver">
+
+You want a board like this one:
+
+- **"CEMENT" printed on the silkscreen.** This is the Cement family, and it
+  is the generation this component was built and tested against.
+- **No IR receiver.** IR bands have a clear or dark domed photodiode facing
+  out of the board. If you see one, this component is the wrong tool.
+- Runs on **CR2032** coin cells.
+
+If your band is IR, the work you want is
+[pixmob-ir-reverse-engineering](https://github.com/danielweidman/pixmob-ir-reverse-engineering),
+which is a different protocol on different hardware.
+
+Bands ship regionally: 915.33 MHz in North America, 868.41 MHz in Europe.
+The frequency follows where the band was used, not where you live.
 
 ## Hardware
 
@@ -219,9 +240,10 @@ read fails, recheck wiring, especially on unlabeled modules.
 
 ## Frequency
 
-915.33 MHz (US) and 868.41 MHz (EU) exactly, both 35 times the band's
-crystal. Which one you need depends on where the band was deployed, not
-where you live. If a band stays dark at one frequency, try the other.
+915.33 MHz and 868.41 MHz exactly, both 35 times the band's crystal, so
+neither is the round number you might expect. Set `frequency:` on the
+`cc1101:` block. If a band stays dark on one, try the other before
+suspecting anything else.
 
 ## Credit
 
