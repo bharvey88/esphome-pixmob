@@ -299,7 +299,19 @@ actions:
           rgb_color: "{{ team_rgb_1 }}"
           brightness_pct: !input hold_brightness
     else:
-      - alias: "Restore the lights to how they were"
-        action: scene.turn_on
-        target:
-          entity_id: "scene.{{ restore_scene_id }}"
+      - if:
+          - alias: "The snapshot scene actually exists"
+            condition: template
+            value_template: >-
+              {{ states.scene[restore_scene_id] is not none }}
+        then:
+          - alias: "Restore the lights to how they were"
+            action: scene.turn_on
+            continue_on_error: true
+            target:
+              entity_id: "scene.{{ restore_scene_id }}"
+        else:
+          - alias: "No snapshot to restore; end dark"
+            action: light.turn_off
+            target:
+              entity_id: !input lights
