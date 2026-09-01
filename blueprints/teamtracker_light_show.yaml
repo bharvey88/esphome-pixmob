@@ -1,14 +1,35 @@
 blueprint:
   name: TeamTracker Light Show
   description: >-
-    Turn any light into a sports companion for a TeamTracker team. When your
-    team scores, the lights flash in your team's colors, one flash per point.
-    Optionally flash the opponent's colors when they score, pulse the team
-    colors when the game goes live, and celebrate a win (or dim out a loss)
-    at the final whistle. Lights are restored to their previous state after
-    each show, or held at a low-brightness team color for the whole game if
-    you enable game mode. Works with any RGB light, including a PixMob
-    wristband running esphome-pixmob.
+    🏟️ Turn any light into a sports companion for your team.
+
+
+    🚨 **Your team scores** and the lights flash in your team's real colors,
+    one flash per point. A touchdown flashes six times. 😤 **The opponent
+    scores** and you get two flashes in their colors (optional, for the
+    honest households). 🏈 **Kickoff** gets three team-color pulses so you
+    never miss the start. 🏆 **Final whistle** brings a ten-flash victory
+    party, or a single quiet fade for a loss. We don't talk about the fade.
+
+
+    🎮 **Game mode** (optional) holds a dim team color for the whole game
+    instead of restoring the lights between plays.
+
+
+    ✨ Lights are snapshotted before each show and restored after, so your
+    regular bulbs go right back to whatever they were doing.
+
+
+    **Prerequisites**
+
+
+    📊 [TeamTracker](https://github.com/vasqued2/ha-teamtracker) installed
+    (HACS) with a sensor for your team. Team and opponent colors come from
+    it automatically, so this works for any team in any league it supports.
+
+
+    💡 Any RGB light in Home Assistant. Extra fun on a real concert
+    wristband via [esphome-pixmob](https://github.com/bharvey88/esphome-pixmob).
   domain: automation
   source_url: https://github.com/bharvey88/esphome-pixmob/blob/main/blueprints/teamtracker_light_show.yaml
   input:
