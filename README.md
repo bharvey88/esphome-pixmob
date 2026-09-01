@@ -73,6 +73,42 @@ Wiring on a plain ESP32 WROOM-32 devkit, matching the config in
 | 7 | MISO | D19 |
 | 8 | GDO2 | not connected |
 
+### On an Apollo ESPHome Starter Kit
+
+The [Breakout Module](https://wiki.apolloautomation.com/products/ESPHome-Starter-Kit/modules/apollo-breakout-module/)
+brings the ESP32-C6's spare pins out to a 2x6 header, and the radio needs
+exactly the five signals it has free. This is the rig the component was
+developed on.
+
+<img src="docs/images/esk1-full-rig.jpg" width="480" alt="ESP32-C6 connected by ribbon cable to the breakout module, wired to a CC1101 module with a large antenna">
+
+| Module pin | Signal | Breakout header |
+| --- | --- | --- |
+| 1 | GND | GND |
+| 2 | VCC | 3.3V |
+| 3 | GDO0 | IO7 |
+| 4 | CSN | IO2 |
+| 5 | SCK | IO3 |
+| 6 | MOSI | IO6 |
+| 7 | MISO | IO14 |
+
+<img src="docs/images/esk1-breakout-header.jpg" width="480" alt="Close-up of the breakout module's GPIO header with jumper wires seated">
+
+The header's 3.3V pin runs on the ESP32-C6's switched rail, so the config
+has to hold that rail on or the radio never powers up:
+
+```yaml
+switch:
+  - platform: gpio
+    pin:
+      number: GPIO4
+      ignore_strapping_warning: true
+    id: accessory_power
+    restore_mode: ALWAYS_ON
+    setup_priority: 2000
+    internal: true
+```
+
 ## Configuration
 
 ```yaml
