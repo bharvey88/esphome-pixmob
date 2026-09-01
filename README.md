@@ -26,7 +26,9 @@ You want a board like this one:
 
 If your band is IR, the work you want is
 [pixmob-ir-reverse-engineering](https://github.com/danielweidman/pixmob-ir-reverse-engineering),
-which is a different protocol on different hardware.
+which has the IR protocol and a transmitter for it. That repository is also
+the best general reference for PixMob hardware, and it carries RF signal
+captures in its `rf/` folder.
 
 Bands ship regionally: 915.33 MHz in North America, 868.41 MHz in Europe.
 The frequency follows where the band was used, not where you live.
