@@ -1,0 +1,284 @@
+blueprint:
+  name: TeamTracker Light Show
+  description: >-
+    Turn any light into a sports companion for a TeamTracker team. When your
+    team scores, the lights flash in your team's colors, one flash per point.
+    Optionally flash the opponent's colors when they score, pulse the team
+    colors when the game goes live, and celebrate a win (or dim out a loss)
+    at the final whistle. Lights are restored to their previous state after
+    each show, or held at a low-brightness team color for the whole game if
+    you enable game mode. Works with any RGB light, including a PixMob
+    wristband running esphome-pixmob.
+  domain: automation
+  source_url: https://github.com/bharvey88/esphome-pixmob/blob/main/blueprints/teamtracker_light_show.yaml
+  input:
+    team_sensor:
+      name: TeamTracker sensor
+      description: The team to follow.
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+              integration: teamtracker
+    lights:
+      name: Lights
+      description: The light or lights that perform the show.
+      selector:
+        entity:
+          filter:
+            - domain: light
+          multiple: true
+    brightness:
+      name: Show brightness
+      description: Brightness used for flashes and celebrations.
+      default: 80
+      selector:
+        number:
+          min: 10
+          max: 100
+          unit_of_measurement: "%"
+    opponent_flashes:
+      name: Flash on opponent scores
+      description: Also flash, in the opponent's colors, when they score.
+      default: true
+      selector:
+        boolean:
+    game_start_alert:
+      name: Pulse when the game goes live
+      default: true
+      selector:
+        boolean:
+    game_end_alert:
+      name: Celebrate the final result
+      description: Team-color party on a win, a single dim fade on a loss.
+      default: true
+      selector:
+        boolean:
+    hold_during_game:
+      name: Game mode hold
+      description: >-
+        Keep the lights at a dim team color for the whole game instead of
+        restoring them between events. Battery-powered lights (like a PixMob
+        band) drain faster with this on.
+      default: false
+      selector:
+        boolean:
+    hold_brightness:
+      name: Game mode brightness
+      default: 30
+      selector:
+        number:
+          min: 5
+          max: 100
+          unit_of_measurement: "%"
+
+mode: queued
+max: 10
+
+triggers:
+  - alias: "My team scored"
+    trigger: state
+    entity_id: !input team_sensor
+    attribute: team_score
+    id: my_score
+  - alias: "Opponent scored"
+    trigger: state
+    entity_id: !input team_sensor
+    attribute: opponent_score
+    id: opp_score
+  - alias: "Game went live"
+    trigger: state
+    entity_id: !input team_sensor
+    to: "IN"
+    id: game_on
+  - alias: "Game ended"
+    trigger: state
+    entity_id: !input team_sensor
+    from: "IN"
+    to: "POST"
+    id: game_over
+
+variables:
+  team_sensor: !input team_sensor
+  lights: !input lights
+  brightness: !input brightness
+  hold_during_game: !input hold_during_game
+  hold_brightness: !input hold_brightness
+  opponent_flashes: !input opponent_flashes
+  game_start_alert: !input game_start_alert
+  game_end_alert: !input game_end_alert
+  team_colors: "{{ state_attr(team_sensor, 'team_colors') or ['#FFFFFF', '#808080'] }}"
+  opp_colors: "{{ state_attr(team_sensor, 'opponent_colors') or ['#FFFFFF', '#808080'] }}"
+  team_rgb_1: >-
+    {% set h = (team_colors[0] | replace('#', '')) %}
+    {{ [h[0:2] | int(base=16), h[2:4] | int(base=16), h[4:6] | int(base=16)] }}
+  team_rgb_2: >-
+    {% set h = (team_colors[1] | replace('#', '')) %}
+    {{ [h[0:2] | int(base=16), h[2:4] | int(base=16), h[4:6] | int(base=16)] }}
+  opp_rgb_1: >-
+    {% set h = (opp_colors[0] | replace('#', '')) %}
+    {{ [h[0:2] | int(base=16), h[2:4] | int(base=16), h[4:6] | int(base=16)] }}
+  opp_rgb_2: >-
+    {% set h = (opp_colors[1] | replace('#', '')) %}
+    {{ [h[0:2] | int(base=16), h[2:4] | int(base=16), h[4:6] | int(base=16)] }}
+  restore_scene_id: "tt_show_{{ this.entity_id | replace('.', '_') }}"
+
+actions:
+  - alias: "Snapshot the lights so they can be restored after the show"
+    action: scene.create
+    data:
+      scene_id: "{{ restore_scene_id }}"
+      snapshot_entities: "{{ lights }}"
+  - alias: "Run the show for whichever event fired"
+    choose:
+      - alias: "My team scored: one team-color flash per point"
+        conditions:
+          - alias: "Score event with a real increase (ignores corrections)"
+            condition: template
+            value_template: >-
+              {{ trigger.id == 'my_score'
+                 and trigger.from_state.attributes.team_score is number
+                 and trigger.to_state.attributes.team_score is number
+                 and trigger.to_state.attributes.team_score
+                     > trigger.from_state.attributes.team_score }}
+        sequence:
+          - alias: "Flash once per point, alternating the two team colors"
+            repeat:
+              count: >-
+                {{ [ [ (trigger.to_state.attributes.team_score
+                        - trigger.from_state.attributes.team_score), 2 ] | max,
+                     8 ] | min }}
+              sequence:
+                - alias: "Primary color on"
+                  action: light.turn_on
+                  target:
+                    entity_id: !input lights
+                  data:
+                    rgb_color: "{{ team_rgb_1 }}"
+                    brightness_pct: !input brightness
+                - delay:
+                    milliseconds: 350
+                - alias: "Secondary color on"
+                  action: light.turn_on
+                  target:
+                    entity_id: !input lights
+                  data:
+                    rgb_color: "{{ team_rgb_2 }}"
+                    brightness_pct: !input brightness
+                - delay:
+                    milliseconds: 350
+      - alias: "Opponent scored: short flash in their colors"
+        conditions:
+          - alias: "Opponent flashes are enabled"
+            condition: template
+            value_template: "{{ opponent_flashes }}"
+          - alias: "Score event with a real increase"
+            condition: template
+            value_template: >-
+              {{ trigger.id == 'opp_score'
+                 and trigger.from_state.attributes.opponent_score is number
+                 and trigger.to_state.attributes.opponent_score is number
+                 and trigger.to_state.attributes.opponent_score
+                     > trigger.from_state.attributes.opponent_score }}
+        sequence:
+          - alias: "Two flashes of the opponent's colors"
+            repeat:
+              count: 2
+              sequence:
+                - action: light.turn_on
+                  target:
+                    entity_id: !input lights
+                  data:
+                    rgb_color: "{{ opp_rgb_1 }}"
+                    brightness_pct: !input brightness
+                - delay:
+                    milliseconds: 300
+                - action: light.turn_on
+                  target:
+                    entity_id: !input lights
+                  data:
+                    rgb_color: "{{ opp_rgb_2 }}"
+                    brightness_pct: !input brightness
+                - delay:
+                    milliseconds: 300
+      - alias: "Game went live: three team-color pulses"
+        conditions:
+          - alias: "Start alerts are enabled"
+            condition: template
+            value_template: "{{ trigger.id == 'game_on' and game_start_alert }}"
+        sequence:
+          - repeat:
+              count: 3
+              sequence:
+                - action: light.turn_on
+                  target:
+                    entity_id: !input lights
+                  data:
+                    rgb_color: "{{ team_rgb_1 }}"
+                    brightness_pct: !input brightness
+                - delay:
+                    milliseconds: 500
+                - action: light.turn_off
+                  target:
+                    entity_id: !input lights
+                - delay:
+                    milliseconds: 300
+      - alias: "Game ended: celebrate a win, fade out a loss"
+        conditions:
+          - alias: "End alerts are enabled"
+            condition: template
+            value_template: "{{ trigger.id == 'game_over' and game_end_alert }}"
+        sequence:
+          - if:
+              - alias: "We won"
+                condition: template
+                value_template: "{{ state_attr(team_sensor, 'team_winner') in [true, 'true', 1] }}"
+            then:
+              - alias: "Victory party: ten alternating team-color flashes"
+                repeat:
+                  count: 10
+                  sequence:
+                    - action: light.turn_on
+                      target:
+                        entity_id: !input lights
+                      data:
+                        rgb_color: "{{ team_rgb_1 }}"
+                        brightness_pct: !input brightness
+                    - delay:
+                        milliseconds: 300
+                    - action: light.turn_on
+                      target:
+                        entity_id: !input lights
+                      data:
+                        rgb_color: "{{ team_rgb_2 }}"
+                        brightness_pct: !input brightness
+                    - delay:
+                        milliseconds: 300
+            else:
+              - alias: "Loss: one slow dim pulse in team primary, then quiet"
+                action: light.turn_on
+                target:
+                  entity_id: !input lights
+                data:
+                  rgb_color: "{{ team_rgb_1 }}"
+                  brightness_pct: 25
+              - delay:
+                  seconds: 3
+  - alias: "After the show: hold team color in game mode, otherwise restore"
+    if:
+      - alias: "Game mode is on and the game is live"
+        condition: template
+        value_template: "{{ hold_during_game and is_state(team_sensor, 'IN') }}"
+    then:
+      - alias: "Hold dim team primary"
+        action: light.turn_on
+        target:
+          entity_id: !input lights
+        data:
+          rgb_color: "{{ team_rgb_1 }}"
+          brightness_pct: !input hold_brightness
+    else:
+      - alias: "Restore the lights to how they were"
+        action: scene.turn_on
+        target:
+          entity_id: "scene.{{ restore_scene_id }}"

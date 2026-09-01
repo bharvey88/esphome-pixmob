@@ -97,6 +97,22 @@ zones from one transmitter.
 curve, and ESPHome's default 2.8 gamma on top of it crushes dim colors to
 black.
 
+## TeamTracker Light Show blueprint
+
+[![Import blueprint](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbharvey88%2Fesphome-pixmob%2Fblob%2Fmain%2Fblueprints%2Fteamtracker_light_show.yaml)
+
+Pair the band (or any RGB light) with a
+[TeamTracker](https://github.com/vasqued2/ha-teamtracker) sensor and it
+becomes a sports companion: one team-color flash per point when your team
+scores, opponent-color flashes when they score (optional), pulses at
+kickoff, and a victory party or a quiet fade at the final whistle. An
+optional game mode holds a dim team color for the whole game. Lights are
+snapshotted before each show and restored after, so smart bulbs go back to
+whatever they were doing.
+
+The blueprint lives at
+[blueprints/teamtracker_light_show.yaml](blueprints/teamtracker_light_show.yaml).
+
 ## Troubleshooting
 
 If a solid color pulses rapidly (bright, dark, bright, over and over) at
