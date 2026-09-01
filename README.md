@@ -23,9 +23,15 @@ wristbands are infrared and will not work here. If you are buying bands to
 experiment with, buy Waveband. Listings for stadium giveaways rarely say
 which model they are, so ask the seller before buying.
 
-**By markings on the band:** the band this component was developed and
-tested with is marked **W2 Gen3**, and its board is a Cement V1.1. If you
-find that marking, you have the right kind of band.
+**By the label on the band:** the underside of the housing carries a
+printed label. The band this component was developed and tested with reads
+**Product# W2 Gen3**, W2 for Waveband 2. A photo of that label is the best
+thing to ask a seller for.
+
+<img src="docs/images/pixmob-w2-gen3-label.jpg" width="560" alt="Label on the underside of a PixMob band reading Product# W2 Gen3 and 6V, Lithium Cell CR2032 3V x 2">
+
+The same label gives the power supply: **6V, two CR2032 cells in series**,
+not the 3V a single cell suggests.
 
 **By board:** open one and look.
 
@@ -33,7 +39,7 @@ find that marking, you have the right kind of band.
   Waveband, and the generation this component was built and tested against.
 - **No IR receiver.** IR bands have a clear or dark domed photodiode facing
   out of the board. If you see one, this component is the wrong tool.
-- Runs on **CR2032** coin cells.
+- Two **CR2032** cells, wired in series.
 
 If your band is IR, the work you want is
 [pixmob-ir-reverse-engineering](https://github.com/danielweidman/pixmob-ir-reverse-engineering),
@@ -251,7 +257,8 @@ The blueprint lives at
 If a solid color pulses rapidly (bright, dark, bright, over and over), the
 band's batteries are weak. Fresh cells fix it, confirmed on a band that
 pulsed at anything above 85% brightness on tired cells and went rock steady
-on new ones.
+on new ones. Replace both cells: they sit in series, so the weaker one sets
+the limit.
 
 The tell is that it depends on current draw rather than on any particular
 color: as the cells drain, first white and pale colors start pulsing, since
