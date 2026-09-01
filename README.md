@@ -51,6 +51,28 @@ To orient yourself on any unlabeled module: GND is the edge-row pin that
 has continuity to the antenna connector's shield. Never feed the module
 5V, the CC1101 is not 5V tolerant.
 
+Many CC1101 boards number the header corners on the back instead of naming
+the pins. Those numbers are the E07-M1101D order above, so they are all you
+need: 1 is GND, 2 is VCC, and the pairs count away from there.
+
+<img src="docs/images/cc1101-module-pins.jpg" width="420" alt="Back of a CC1101 module showing pins 1, 2, 7 and 8 numbered at the header corners">
+
+Wiring on a plain ESP32 WROOM-32 devkit, matching the config in
+[example.yaml](example.yaml):
+
+<img src="docs/images/esp32-devkit-wiring.jpg" width="420" alt="ESP32 devkit with jumper wires on the SPI pins and an antenna">
+
+| Module pin | Signal | Devkit pin |
+| --- | --- | --- |
+| 1 | GND | GND |
+| 2 | VCC | 3V3 |
+| 3 | GDO0 | D14 |
+| 4 | CSN | D5 |
+| 5 | SCK | D18 |
+| 6 | MOSI | D23 |
+| 7 | MISO | D19 |
+| 8 | GDO2 | not connected |
+
 ## Configuration
 
 ```yaml
