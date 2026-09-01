@@ -23,6 +23,10 @@ wristbands are infrared and will not work here. If you are buying bands to
 experiment with, buy Waveband. Listings for stadium giveaways rarely say
 which model they are, so ask the seller before buying.
 
+**By markings on the band:** the band this component was developed and
+tested with is marked **W2 Gen3**, and its board is a Cement V1.1. If you
+find that marking, you have the right kind of band.
+
 **By board:** open one and look.
 
 - **"CEMENT" printed on the silkscreen.** This is the board inside the
