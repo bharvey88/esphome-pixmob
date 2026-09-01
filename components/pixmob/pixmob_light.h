@@ -41,8 +41,8 @@ class PixMobLight : public Component, public light::LightOutput {
   light::LightState *state_{nullptr};
 
   uint8_t group_{0};
-  uint8_t attack_{1};
-  uint8_t hold_{2};
+  uint8_t attack_{0};
+  uint8_t hold_{7};
   uint8_t release_{2};
   uint8_t random_{0};
   uint32_t refresh_ms_{90};

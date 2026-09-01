@@ -30,8 +30,8 @@ CONFIG_SCHEMA = light.RGB_LIGHT_SCHEMA.extend(
         cv.Required(CONF_TRANSMITTER_ID): cv.use_id(RemoteTransmitterComponent),
         cv.Required(CONF_CC1101_ID): cv.use_id(CC1101Component),
         cv.Optional(CONF_GROUP, default=0): cv.int_range(min=0, max=31),
-        cv.Optional(CONF_ATTACK, default=1): cv.int_range(min=0, max=7),
-        cv.Optional(CONF_HOLD, default=2): cv.int_range(min=0, max=7),
+        cv.Optional(CONF_ATTACK, default=0): cv.int_range(min=0, max=7),
+        cv.Optional(CONF_HOLD, default=7): cv.int_range(min=0, max=7),
         cv.Optional(CONF_RELEASE, default=2): cv.int_range(min=0, max=7),
         cv.Optional(CONF_RANDOM, default=0): cv.int_range(min=0, max=7),
         cv.Optional(

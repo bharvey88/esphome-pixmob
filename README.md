@@ -83,8 +83,8 @@ See [example.yaml](example.yaml) for a complete config.
 | `transmitter_id` | required | | The `remote_transmitter` driving GDO0 |
 | `cc1101_id` | required | | The `cc1101` radio; the light switches it between TX and idle |
 | `group` | `0` | 0-31 | Which bands listen. Bands store a group at the show; 0 is the common default |
-| `attack` | `1` | 0-7 | Fade-in speed applied by the band |
-| `hold` | `2` | 0-7 | How long the band holds the color per frame |
+| `attack` | `0` | 0-7 | Fade-in speed applied by the band. 0 (instant) keeps continuous colors steady |
+| `hold` | `7` | 0-7 | How long the band holds the color per frame. 7 keeps continuous colors steady |
 | `release` | `2` | 0-7 | Fade-out speed when frames stop |
 | `random` | `0` | 0-7 | The protocol's sparkle/randomize field |
 | `refresh_interval` | `90ms` | | Rebroadcast period while on. Must stay under the band's 120ms memory |
@@ -96,6 +96,23 @@ zones from one transmitter.
 `gamma_correct: 1.0` is recommended: the band applies its own brightness
 curve, and ESPHome's default 2.8 gamma on top of it crushes dim colors to
 black.
+
+## Troubleshooting
+
+If a solid color pulses rapidly (bright, dark, bright, over and over) at
+high brightness but is steady at lower brightness, the band's batteries are
+weak. Full-brightness white is the maximum current draw, and tired coin
+cells sag under it until the band browns out, recovers, and repeats. Fresh
+cells fix it. The cutoff moves down as the cells drain.
+
+Very low brightness produces no light at all: the protocol carries 6 bits
+per channel, and the bottom few steps are below the LEDs' visible
+threshold.
+
+If the band never lights: confirm the log shows `CC1101 found! Chip ID:
+0x0014`, hold the band against the antenna, and try the other frequency
+(bands are deployed per show, 915.33MHz US / 868.41MHz EU). If the chip ID
+read fails, recheck wiring, especially on unlabeled modules.
 
 ## Frequency
 
