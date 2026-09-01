@@ -40,14 +40,12 @@ that is the only way to identify the board and the only way to put fresh
 batteries in, and bands collected from an event usually need fresh
 batteries.
 
-Go slowly. These cases have no screws and are not designed to be opened,
-and the band this component was developed with was damaged during
-disassembly. Assume that whatever you are about to lever on can crack, and
-that the wristband may not go back together the way it came apart.
+Go slowly. These cases have no screws and are not designed to be opened.
+The usual outcome is not a dramatic break: the band this component was
+developed with opened fine and simply never clipped shut properly again.
 
-The good news is that a broken case does not mean a broken band. Ours
-still transmits, receives, and lights perfectly with its case in pieces,
-so a rough disassembly costs you the wearable, not the project.
+That costs you the tidy wearable, not the project. Ours still receives and
+lights perfectly with a case that no longer closes.
 
 If you work out a reliable way in on a Cement board, please open an issue.
 Documenting that properly would help everyone here.
