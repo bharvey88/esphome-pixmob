@@ -60,6 +60,8 @@ need: 1 is GND, 2 is VCC, and the pairs count away from there.
 Wiring on a plain ESP32 WROOM-32 devkit, matching the config in
 [example.yaml](example.yaml):
 
+<img src="docs/images/wiring-devkit.svg" width="820" alt="Wiring diagram: CC1101 module 2x4 header and ESP32 devkit pins, color-coded, with the list of the seven connections">
+
 <img src="docs/images/esp32-devkit-wiring.jpg" width="420" alt="ESP32 devkit with jumper wires on the SPI pins and an antenna">
 
 | Module pin | Signal | Devkit pin |
