@@ -33,6 +33,35 @@ captures in its `rf/` folder.
 Bands ship regionally: 915.33 MHz in North America, 868.41 MHz in Europe.
 The frequency follows where the band was used, not where you live.
 
+### Opening a band without wrecking it
+
+You may not need to open anything. If you already have the radio built,
+the cheapest test is to power the band, hold it against the antenna, and
+try both frequencies. A band that lights is an RF band. Only open one when
+you have to identify it before buying parts.
+
+These cases are not built to be opened. There are no screws: the housing
+is held by internal clips, and the back cover locks itself in place under
+tension. Take your time and expect to break something eventually.
+
+1. Find the slot on the side of the back cover. That is the only intended
+   entry point.
+2. Pry gently there, just enough to slip a thin tool in and push the clips
+   inward on one side. The cover pops out rather than levering off.
+3. Stop once the board is visible. That is all you need to identify the
+   band.
+
+Do not peel the flexible PCB off the band. That step is irreversible, and
+the plastic tabs holding everything together snap easily. Prying at the
+seam instead of at the slot cracks the case. A broken case still works
+electrically, so a damaged band is not a wasted band, but the wristband
+will not go back together the way it came apart.
+
+Detailed teardown photos of the case construction are in
+[Gough Lui's Aurora v1.7 teardown](https://goughlui.com/2025/01/14/teardown-pixmob-led-wristband-aurora-v1-7/).
+Case designs vary between models, so treat any teardown as a guide rather
+than instructions for your exact band.
+
 ## Hardware
 
 - Any ESP32 board ESPHome supports (tested on an ESP32-C6 and a classic
