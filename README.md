@@ -82,15 +82,24 @@ developed on.
 
 <img src="docs/images/esk1-full-rig.jpg" width="480" alt="ESP32-C6 connected by ribbon cable to the breakout module, wired to a CC1101 module with a large antenna">
 
-| Module pin | Signal | Breakout header |
-| --- | --- | --- |
-| 1 | GND | GND |
-| 2 | VCC | 3.3V |
-| 3 | GDO0 | IO7 |
-| 4 | CSN | IO2 |
-| 5 | SCK | IO3 |
-| 6 | MOSI | IO6 |
-| 7 | MISO | IO14 |
+The wire colors below are the ones in these photos, so you can match both
+ends against the same table.
+
+| Module pin | Signal | Breakout header | Wire in the photos |
+| --- | --- | --- | --- |
+| 1 | GND | GND | black |
+| 2 | VCC | 3.3V | red |
+| 3 | GDO0 | IO7 | white |
+| 4 | CSN | IO2 | orange |
+| 5 | SCK | IO3 | green |
+| 6 | MOSI | IO6 | grey |
+| 7 | MISO | IO14 | blue |
+
+Radio end, wires seated on the unlabeled 2x4 header:
+
+<img src="docs/images/rabbit-module-wires.jpg" width="480" alt="CC1101 module with colored jumper wires on its 2x4 header and an antenna attached">
+
+Breakout end, same wires on the 2x6 GPIO header:
 
 <img src="docs/images/esk1-breakout-header.jpg" width="480" alt="Close-up of the breakout module's GPIO header with jumper wires seated">
 
